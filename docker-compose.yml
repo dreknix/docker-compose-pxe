@@ -1,0 +1,23 @@
+---
+
+services:
+
+  tftpd:
+    build: ./tftpd
+    container_name: pxe-tftpd
+    volumes:
+      - pxe-tftpboot:/tftpboot
+    cap_drop:
+      - ALL
+    cap_add:
+      - SETUID
+      - SETGID
+      - SYS_CHROOT
+      - NET_BIND_SERVICE
+    network_mode: host
+
+volumes:
+  pxe-tftpboot:
+    external: true
+
+...
