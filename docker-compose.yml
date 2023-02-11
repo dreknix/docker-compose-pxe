@@ -3,10 +3,11 @@
 services:
 
   tftpd:
-    build: ./tftpd
+    image: dreknix/pxe-tftpd:latest
     container_name: pxe-tftpd
     volumes:
       - pxe-tftpboot:/tftpboot
+    network_mode: host
     cap_drop:
       - ALL
     cap_add:
@@ -14,10 +15,22 @@ services:
       - SETGID
       - SYS_CHROOT
       - NET_BIND_SERVICE
-    network_mode: host
+
+  httpd:
+    image: dreknix/pxe-httpd:latest
+    container_name: pxe-httpd
+    volumes:
+      - pxe-www:/www
+      - ./config_local.json:/config_local.json
+    ports:
+      - 8069:8069
+    cap_drop:
+      - ALL
 
 volumes:
   pxe-tftpboot:
+    external: true
+  pxe-www:
     external: true
 
 ...
